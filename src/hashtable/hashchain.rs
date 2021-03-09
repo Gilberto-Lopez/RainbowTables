@@ -25,3 +25,17 @@ impl PartialEq for HashChain {
 }
 
 impl Eq for HashChain {}
+
+impl HashChain {
+    pub fn new(sp: [u8; 16], ep: [u8; 16]) -> Self {
+        HashChain { sp, ep }
+    }
+
+    pub fn starting_point(&self) -> &[u8; 16] {
+        &self.sp
+    }
+
+    pub fn endpoint(&self) -> &[u8; 16] {
+        &self.ep
+    }
+}
