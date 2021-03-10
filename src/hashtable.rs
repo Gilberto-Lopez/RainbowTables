@@ -16,7 +16,7 @@ impl HashTable {
     }
 
     fn compute_chain(&self, chain: &HashChain, r: u32) -> [u8; 16] {
-        assert!(r > self.t);
+        assert!(r <= self.t);
 
         let mut x_j = *chain.starting_point();
 
