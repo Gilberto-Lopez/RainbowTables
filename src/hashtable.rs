@@ -1,3 +1,6 @@
+use rand::prelude::*;
+use rand_pcg::Pcg64;
+
 mod hashchain;
 
 use hashchain::HashChain;
@@ -13,8 +16,46 @@ pub struct HashTable {
 }
 
 impl HashTable {
-    pub fn new() -> Self {
-        unimplemented!()
+    pub fn new(
+        t: u32,
+        m: u32,
+        hash_function: fn(&Word) -> Word,
+        reduction: fn(&Word) -> Word,
+    ) -> Self {
+        let mut table = Vec::new();
+
+        let sps: Vec<Word>;
+
+        let mut rng = Pcg64::seed_from_u64(2);
+
+        sps = (0..m)
+            .map(|_| {
+                let mut sp = [0u8; 16];
+                rng.fill(&mut sp);
+                sp
+            })
+            .collect();
+
+        for sp in sps {
+            let mut x_j = sp;
+
+            for _ in 0..t {
+                let h_j = hash_function(&x_j);
+                x_j = reduction(&h_j);
+            }
+
+            table.push(HashChain::new(sp, x_j));
+        }
+
+        table.sort_unstable();
+
+        HashTable {
+            table,
+            t,
+            m,
+            hash_function,
+            reduction,
+        }
     }
 
     fn compute_chain(&self, chain: &HashChain, r: u32) -> Word {
