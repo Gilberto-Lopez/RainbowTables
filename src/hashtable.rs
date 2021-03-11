@@ -2,12 +2,14 @@ mod hashchain;
 
 use hashchain::HashChain;
 
+type Word = [u8; 16];
+
 pub struct HashTable {
     table: Vec<HashChain>,
     t: u32,
     m: u32,
-    hash_function: fn(&[u8; 16]) -> [u8; 16],
-    reduction: fn(&[u8; 16]) -> [u8; 16],
+    hash_function: fn(&Word) -> Word,
+    reduction: fn(&Word) -> Word,
 }
 
 impl HashTable {
@@ -15,7 +17,7 @@ impl HashTable {
         unimplemented!()
     }
 
-    fn compute_chain(&self, chain: &HashChain, r: u32) -> [u8; 16] {
+    fn compute_chain(&self, chain: &HashChain, r: u32) -> Word {
         assert!(r <= self.t);
 
         let mut x_j = *chain.starting_point();
@@ -28,11 +30,11 @@ impl HashTable {
         x_j
     }
 
-    fn endpoints(&self) -> Vec<&[u8; 16]> {
+    fn endpoints(&self) -> Vec<&Word> {
         self.table.iter().map(|hc| hc.endpoint()).collect()
     }
 
-    pub fn lookup(&self, h: &[u8; 16]) -> Result<[u8; 16], &'static str> {
+    pub fn lookup(&self, h: &Word) -> Result<Word, &'static str> {
         let mut y = (self.reduction)(h);
         let mut steps = 1;
 
