@@ -5,32 +5,36 @@ mod hashchain;
 
 use hashchain::HashChain;
 
-type Word = [u8; 16];
+const TEXT_LENGTH: usize = 4;
+const HASH_LENGTH: usize = 16;
+
+pub type Text = [u8; TEXT_LENGTH];
+pub type Hash = [u8; HASH_LENGTH];
 
 pub struct HashTable {
     table: Vec<HashChain>,
     t: u32,
     m: u32,
-    hash_function: fn(&Word) -> Word,
-    reduction: fn(&Word) -> Word,
+    hash_function: fn(&Text) -> Hash,
+    reduction: fn(&Hash) -> Text,
 }
 
 impl HashTable {
     pub fn new(
         t: u32,
         m: u32,
-        hash_function: fn(&Word) -> Word,
-        reduction: fn(&Word) -> Word,
+        hash_function: fn(&Text) -> Hash,
+        reduction: fn(&Hash) -> Text,
     ) -> Self {
         let mut table = Vec::new();
 
-        let sps: Vec<Word>;
+        let sps: Vec<Text>;
 
         let mut rng = Pcg64::seed_from_u64(2);
 
         sps = (0..m)
             .map(|_| {
-                let mut sp = [0u8; 16];
+                let mut sp = [0u8; TEXT_LENGTH];
                 rng.fill(&mut sp);
                 sp
             })
@@ -58,7 +62,7 @@ impl HashTable {
         }
     }
 
-    fn compute_chain(&self, chain: &HashChain, r: u32) -> Word {
+    fn compute_chain(&self, chain: &HashChain, r: u32) -> Text {
         assert!(r <= self.t);
 
         let mut x_j = *chain.starting_point();
@@ -71,11 +75,11 @@ impl HashTable {
         x_j
     }
 
-    fn endpoints(&self) -> Vec<&Word> {
+    fn endpoints(&self) -> Vec<&Text> {
         self.table.iter().map(|hc| hc.endpoint()).collect()
     }
 
-    pub fn lookup(&self, h: &Word) -> Result<Word, &'static str> {
+    pub fn lookup(&self, h: &Hash) -> Result<Text, &'static str> {
         let mut y = (self.reduction)(h);
         let mut steps = 1;
 

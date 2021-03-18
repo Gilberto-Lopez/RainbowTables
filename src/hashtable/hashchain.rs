@@ -1,11 +1,11 @@
 use std::cmp::Ordering;
 
-use super::Word;
+use super::Text;
 
 // Hashchain with starting point sp and endpoint ep
 pub struct HashChain {
-    sp: Word,
-    ep: Word,
+    sp: Text,
+    ep: Text,
 }
 
 impl Ord for HashChain {
@@ -29,15 +29,15 @@ impl PartialEq for HashChain {
 impl Eq for HashChain {}
 
 impl HashChain {
-    pub fn new(sp: Word, ep: Word) -> Self {
+    pub fn new(sp: Text, ep: Text) -> Self {
         HashChain { sp, ep }
     }
 
-    pub fn starting_point(&self) -> &Word {
+    pub fn starting_point(&self) -> &Text {
         &self.sp
     }
 
-    pub fn endpoint(&self) -> &Word {
+    pub fn endpoint(&self) -> &Text {
         &self.ep
     }
 }
