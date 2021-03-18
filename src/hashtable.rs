@@ -3,7 +3,7 @@ use rand_pcg::Pcg64;
 
 mod hashchain;
 
-use hashchain::HashChain;
+pub use hashchain::HashChain;
 
 const TEXT_LENGTH: usize = 4;
 const HASH_LENGTH: usize = 16;
