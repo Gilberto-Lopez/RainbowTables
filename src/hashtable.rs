@@ -27,30 +27,25 @@ impl HashTable {
         hash_function: fn(&Text) -> Hash,
         reduction: fn(&Hash) -> Text,
     ) -> Self {
-        let mut table = Vec::new();
-
-        let sps: Vec<Text>;
+        let mut table: Vec<HashChain>;
 
         let mut rng = Pcg64::seed_from_u64(2);
 
-        sps = (0..m)
+        table = (0..m)
             .map(|_| {
                 let mut sp = [0u8; TEXT_LENGTH];
                 rng.fill(&mut sp);
-                sp
+
+                let mut x_j = sp;
+
+                for _ in 0..t {
+                    let h_j = hash_function(&x_j);
+                    x_j = reduction(&h_j);
+                }
+
+                HashChain::new(sp, x_j)
             })
             .collect();
-
-        for sp in sps {
-            let mut x_j = sp;
-
-            for _ in 0..t {
-                let h_j = hash_function(&x_j);
-                x_j = reduction(&h_j);
-            }
-
-            table.push(HashChain::new(sp, x_j));
-        }
 
         table.sort_unstable();
 
