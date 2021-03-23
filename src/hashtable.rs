@@ -11,6 +11,7 @@ const HASH_LENGTH: usize = 16;
 pub type Text = [u8; TEXT_LENGTH];
 pub type Hash = [u8; HASH_LENGTH];
 
+#[allow(unused_attributes)]
 pub struct HashTable {
     table: Vec<HashChain>,
     t: u32,
@@ -63,7 +64,7 @@ impl HashTable {
     }
 
     fn compute_chain(&self, chain: &HashChain, r: u32) -> Text {
-        assert!(r <= self.t);
+        assert!(r < self.t);
 
         let mut x_j = *chain.starting_point();
 

@@ -1,5 +1,6 @@
 use crate::hashtable::{Hash, HashChain, Text};
 
+#[allow(unused_attributes)]
 pub struct RainbowTable {
     table: Vec<HashChain>,
     t: u32,
@@ -8,9 +9,10 @@ pub struct RainbowTable {
     reductions: Vec<fn(&Hash) -> Text>,
 }
 
+#[allow(non_snake_case)]
 impl RainbowTable {
     fn compute_chain(&self, chain: &HashChain, r: u32) -> Text {
-        assert!(r <= self.t);
+        assert!(r < self.t);
 
         let mut x_j = *chain.starting_point();
 
