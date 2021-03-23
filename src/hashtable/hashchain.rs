@@ -1,4 +1,5 @@
 use std::cmp::Ordering;
+use std::fmt;
 
 use super::Text;
 
@@ -27,6 +28,18 @@ impl PartialEq for HashChain {
 }
 
 impl Eq for HashChain {}
+
+impl fmt::LowerHex for HashChain {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let sp_rep: Vec<String> = self.sp.iter().map(|b| format!("{:02x}", b)).collect();
+        let ep_rep: Vec<String> = self.ep.iter().map(|b| format!("{:02x}", b)).collect();
+
+        let sp_hex = sp_rep.join("");
+        let ep_hex = ep_rep.join("");
+
+        write!(f, "{},{}", sp_hex, ep_hex)
+    }
+}
 
 impl HashChain {
     pub fn new(sp: Text, ep: Text) -> Self {
