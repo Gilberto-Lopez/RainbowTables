@@ -1,3 +1,6 @@
+use rand::prelude::*;
+use rand_pcg::Pcg64;
+
 use crate::hashtable::HashChain;
 use crate::{Hash, Text, TEXT_LENGTH};
 
@@ -12,6 +15,45 @@ pub struct RainbowTable {
 
 #[allow(non_snake_case)]
 impl RainbowTable {
+    pub fn new(
+        t: u32,
+        m: u32,
+        hash_function: fn(&Text) -> Hash,
+        reductions: Vec<fn(&Hash) -> Text>,
+    ) -> Self {
+        assert!(t == reductions.len() as u32);
+
+        let mut table: Vec<HashChain>;
+
+        let mut rng = Pcg64::seed_from_u64(2);
+
+        table = (0..m)
+            .map(|_| {
+                let mut sp = [0u8; TEXT_LENGTH];
+                rng.fill(&mut sp);
+
+                let mut x_j = sp;
+
+                for R in &reductions {
+                    let h_j = hash_function(&x_j);
+                    x_j = (R)(&h_j);
+                }
+
+                HashChain::new(sp, x_j)
+            })
+            .collect();
+
+        table.sort_unstable();
+
+        RainbowTable {
+            table,
+            t,
+            m,
+            hash_function,
+            reductions,
+        }
+    }
+
     fn compute_chain(&self, chain: &HashChain, r: u32) -> Text {
         assert!(r < self.t);
 
