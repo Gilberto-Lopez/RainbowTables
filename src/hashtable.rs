@@ -6,7 +6,7 @@ mod hashchain;
 use crate::{Hash, Text, TEXT_LENGTH};
 pub use hashchain::HashChain;
 
-#[allow(unused_attributes)]
+#[allow(dead_code)]
 pub struct HashTable {
     table: Vec<HashChain>,
     t: u32,

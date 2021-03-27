@@ -4,7 +4,7 @@ use rand_pcg::Pcg64;
 use crate::hashtable::HashChain;
 use crate::{Hash, Text, TEXT_LENGTH};
 
-#[allow(unused_attributes)]
+#[allow(dead_code)]
 pub struct RainbowTable {
     table: Vec<HashChain>,
     t: u32,
