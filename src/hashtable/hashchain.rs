@@ -1,7 +1,7 @@
 use std::cmp::Ordering;
 use std::fmt;
 
-use super::Text;
+use crate::Text;
 
 // Hashchain with starting point sp and endpoint ep
 pub struct HashChain {

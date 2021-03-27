@@ -3,13 +3,8 @@ use rand_pcg::Pcg64;
 
 mod hashchain;
 
+use crate::{Hash, Text, TEXT_LENGTH};
 pub use hashchain::HashChain;
-
-const TEXT_LENGTH: usize = 4;
-const HASH_LENGTH: usize = 16;
-
-pub type Text = [u8; TEXT_LENGTH];
-pub type Hash = [u8; HASH_LENGTH];
 
 #[allow(unused_attributes)]
 pub struct HashTable {

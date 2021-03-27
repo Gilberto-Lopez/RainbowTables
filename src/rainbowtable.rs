@@ -1,4 +1,5 @@
-use crate::hashtable::{Hash, HashChain, Text};
+use crate::hashtable::HashChain;
+use crate::{Hash, Text, TEXT_LENGTH};
 
 #[allow(unused_attributes)]
 pub struct RainbowTable {
